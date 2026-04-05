@@ -2,6 +2,7 @@
 #define LITMOTION_DEBUG
 #endif
 
+using R3;
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -131,6 +132,18 @@ namespace LitMotion
         }
 
         /// <summary>
+        /// Add this motion handle to SerialDisposable.
+        /// </summary>
+        /// <param name="handle">This motion handle</param>
+        /// <param name="serialDisposable">target SerialDisposable</param>
+        /// <param name="disposeBehavior">behavior when disposed</param>
+        public static MotionHandle AddTo(this MotionHandle handle, SerialDisposable serialDisposable, DisposeBehavior disposeBehavior = DisposeBehavior.Cancel)
+        {
+            serialDisposable.Disposable = handle.ToDisposable(disposeBehavior);
+            return handle;
+        }
+
+        /// <summary>
         /// Link the motion lifecycle to the target object.
         /// </summary>
         /// <param name="handle">This motion handle</param>
@@ -181,9 +194,9 @@ namespace LitMotion
         /// </summary>
         /// <param name="handle">This motion handle</param>
         /// <param name="disposable">Target CompositeDisposable</param>
-        public static MotionHandle AddTo(this MotionHandle handle, global::R3.CompositeDisposable disposable)
+        public static MotionHandle AddTo(this MotionHandle handle, global::R3.CompositeDisposable disposable, DisposeBehavior disposeBehavior = DisposeBehavior.Cancel)
         {
-            disposable.Add(handle.ToDisposable());
+            disposable.Add(handle.ToDisposable(disposeBehavior));
             return handle;
         }
 
